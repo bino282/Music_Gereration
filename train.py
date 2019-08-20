@@ -8,4 +8,4 @@ from utils import *
 from GAN import GAN
 
 gan = GAN(rows=100)    
-gan.train(epochs=5000, batch_size=32, sample_interval=1)
+gan.train(epochs=1000, batch_size=32, sample_interval=1)

@@ -132,5 +132,6 @@ def generate(generator_model,latent_dim,input_notes):
         
     pred_notes = [x*242+242 for x in predictions[0]]
     pred_notes = [int_to_note[int(x)] for x in pred_notes]
+    print(pred_notes)
         
     create_midi(pred_notes, 'gan_final')

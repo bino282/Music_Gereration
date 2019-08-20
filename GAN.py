@@ -4,6 +4,7 @@ from keras.layers.advanced_activations import LeakyReLU
 from keras.models import Sequential, Model
 from keras.optimizers import Adam
 from utils import *
+import matplotlib.pyplot as plt
 class GAN():
     def __init__(self, rows):
         self.seq_length = rows
@@ -12,7 +13,7 @@ class GAN():
         self.disc_loss = []
         self.gen_loss =[]
         
-        optimizer = Adam(0.0002, 0.5)
+        optimizer =  Adam(lr=0.0001, epsilon=1e-8, clipnorm=2.0)
 
         # Build and compile the discriminator
         self.discriminator = self.build_discriminator()
@@ -78,6 +79,7 @@ class GAN():
     
         # Load and convert the data
         notes = get_notes("Pokemon MIDIs")
+        print(notes)
         n_vocab = len(set(notes))
         X_train, y_train = prepare_sequences(notes, n_vocab)
 
@@ -117,8 +119,10 @@ class GAN():
               print ("%d [D loss: %f, acc.: %.2f%%] [G loss: %f]" % (epoch, d_loss[0], 100*d_loss[1], g_loss))
               self.disc_loss.append(d_loss[0])
               self.gen_loss.append(g_loss)
+              generate(self.generator,self.latent_dim,notes)
         
         generate(self.generator,self.latent_dim,notes)
+        self.generator.save("generator.h5")
         self.plot_loss()
     def plot_loss(self):
         plt.plot(self.disc_loss, c='red')
